@@ -690,9 +690,11 @@ public class XmlFactory extends JsonFactory
 
     protected XMLStreamWriter _createXmlWriter(IOContext ctxt, OutputStream out) throws IOException
     {
+        final String xmlEncoding = ctxt.getEncoding() == null ?
+                "UTF-8" : ctxt.getEncoding().getJavaName();
         XMLStreamWriter sw;
         try {
-            sw = _xmlOutputFactory.createXMLStreamWriter(_decorate(ctxt, out), "UTF-8");
+            sw = _xmlOutputFactory.createXMLStreamWriter(_decorate(ctxt, out), xmlEncoding);
         } catch (Exception e) {
             throw new JsonGenerationException(e.getMessage(), e, null);
         }

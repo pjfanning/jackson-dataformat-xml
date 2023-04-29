@@ -244,10 +244,12 @@ public class ToXmlGenerator
         }
         _initialized = true;
         try {
+            final String xmlEncoding = _ioContext.getEncoding() == null ?
+                    "UTF-8" : _ioContext.getEncoding().getJavaName();
             if (Feature.WRITE_XML_1_1.enabledIn(_formatFeatures)) {
-                _xmlWriter.writeStartDocument("UTF-8", "1.1");
+                _xmlWriter.writeStartDocument(xmlEncoding, "1.1");
             } else if (Feature.WRITE_XML_DECLARATION.enabledIn(_formatFeatures)) {
-                _xmlWriter.writeStartDocument("UTF-8", "1.0");
+                _xmlWriter.writeStartDocument(xmlEncoding, "1.0");
             } else {
                 return;
             }
