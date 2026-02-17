@@ -1,4 +1,4 @@
-package tools.jackson.dataformat.xml.tofix;
+package tools.jackson.dataformat.xml.deser;
 
 import java.util.List;
 
@@ -13,15 +13,16 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlText;
-import tools.jackson.dataformat.xml.testutil.failure.JacksonTestFailureExpected;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Test cases to reproduce issue #615: @JacksonXmlText doesn't work properly
- * for deserialization without custom @JsonCreator.
+ * Test cases for issue #615: @JacksonXmlText property name mapping for creators.
  * 
- * This is a reproduction of issue #198 with regular classes.
+ * Tests verify that @JacksonXmlText works correctly with @JsonCreator constructors,
+ * demonstrating the fix where @JacksonXmlText parameters are mapped to empty string property name.
+ * 
+ * This is related to issue #198 with regular classes.
  */
 public class XmlTextDeser615Test extends XmlTestUtil
 {
@@ -54,7 +55,9 @@ public class XmlTextDeser615Test extends XmlTestUtil
         @JacksonXmlText
         final String value;
 
-        public Item(String name, String value) {
+        @JsonCreator
+        public Item(@JacksonXmlProperty(isAttribute = true) String name, 
+                    @JacksonXmlText String value) {
             this.name = name;
             this.value = value;
         }
@@ -148,9 +151,7 @@ public class XmlTextDeser615Test extends XmlTestUtil
         assertEquals("value2", itemRoot.getItem().get(1).getValue());
     }
 
-    // This test fails without @JsonCreator workaround
-    // Expected error: InvalidDefinitionException: Could not find creator property with name '' 
-    @JacksonTestFailureExpected
+    // This test should now work with the fix to findNameForDeserialization
     @Test
     public void testDeserializeItemRootWithoutCreator() throws Exception
     {

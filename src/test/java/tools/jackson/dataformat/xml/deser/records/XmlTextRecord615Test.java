@@ -1,4 +1,4 @@
-package tools.jackson.dataformat.xml.tofix.records;
+package tools.jackson.dataformat.xml.deser.records;
 
 import java.util.List;
 
@@ -13,15 +13,16 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlText;
-import tools.jackson.dataformat.xml.testutil.failure.JacksonTestFailureExpected;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Test cases to reproduce issue #615: @JacksonXmlText doesn't work properly
- * for deserialization with Java Records without custom @JsonCreator.
+ * Test cases for issue #615: @JacksonXmlText property name mapping for Java Records.
  * 
- * This is a reproduction of issue #198 using Java Records.
+ * Tests verify that @JacksonXmlText works correctly with Java Records,
+ * demonstrating the fix where @JacksonXmlText parameters are mapped to empty string property name.
+ * 
+ * This is related to issue #198 using Java Records.
  */
 public class XmlTextRecord615Test extends XmlTestUtil
 {
@@ -46,7 +47,7 @@ public class XmlTextRecord615Test extends XmlTestUtil
         }
     }
 
-    // Version without @JsonCreator - this should fail
+    // Version without explicit @JsonCreator (Records auto-detect canonical constructor)
     @JacksonXmlRootElement(localName = "ITEMROOT")
     public record ItemRoot(
             @JsonProperty("Item") @JacksonXmlElementWrapper(useWrapping = false)
@@ -95,9 +96,7 @@ public class XmlTextRecord615Test extends XmlTestUtil
         assertEquals("value2", itemRoot.item().get(1).value());
     }
 
-    // This test fails without @JsonCreator workaround
-    // Expected error: InvalidDefinitionException: Could not find creator property with name '' 
-    @JacksonTestFailureExpected
+    // This test should now work with the fix to findNameForDeserialization
     @Test
     public void testDeserializeItemRootWithoutCreator() throws Exception
     {
@@ -126,8 +125,7 @@ public class XmlTextRecord615Test extends XmlTestUtil
         assertEquals("<Item name=\"testName\">testValue</Item>", xml);
     }
 
-    // This test demonstrates the core issue - deserialization fails for simple case too
-    @JacksonTestFailureExpected
+    // This test should now work with the fix to findNameForDeserialization
     @Test
     public void testDeserializeSimpleItem() throws Exception
     {
