@@ -75,8 +75,8 @@ public class XmlTextDeser615Test extends XmlTestUtil
 
         @JsonCreator
         public ItemWithCreator(
-                @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
-                @JacksonXmlText String value) {
+                @JsonProperty("name") @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
+                @JsonProperty("value") @JacksonXmlText String value) {
             this.name = name;
             this.value = value;
         }

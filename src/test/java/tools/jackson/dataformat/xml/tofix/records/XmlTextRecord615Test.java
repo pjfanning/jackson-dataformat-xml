@@ -35,11 +35,13 @@ public class XmlTextRecord615Test extends XmlTestUtil
                 @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
                 @JacksonXmlText String value) {
             
-            // Explicit @JsonCreator is the workaround needed for deserialization with @JacksonXmlText
-            // The annotations are on the record components above
+            // Explicit @JsonCreator with @JsonProperty is the workaround needed
             @JsonCreator
-            public ItemWithCreator {
-                // Compact constructor form - field assignments are automatic in Records
+            public ItemWithCreator(
+                    @JsonProperty("name") @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
+                    @JsonProperty("value") @JacksonXmlText String value) {
+                this.name = name;
+                this.value = value;
             }
         }
     }
