@@ -57,7 +57,7 @@ public class XmlTextDeser615Test extends XmlTestUtil
 
         @JsonCreator
         public Item(@JsonProperty("name") @JacksonXmlProperty(isAttribute = true) String name, 
-                    @JacksonXmlText String value) {
+                    @JsonProperty("") @JacksonXmlText String value) {
             this.name = name;
             this.value = value;
         }
@@ -79,7 +79,7 @@ public class XmlTextDeser615Test extends XmlTestUtil
         @JsonCreator
         public ItemWithCreator(
                 @JsonProperty("name") @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
-                @JacksonXmlText String value) {
+                @JsonProperty("") @JacksonXmlText String value) {
             this.name = name;
             this.value = value;
         }
