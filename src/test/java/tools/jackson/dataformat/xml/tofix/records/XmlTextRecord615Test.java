@@ -31,10 +31,8 @@ public class XmlTextRecord615Test extends XmlTestUtil
             @JsonProperty("Item") @JacksonXmlElementWrapper(useWrapping = false)
             List<ItemWithCreator> item) {
 
-        public record ItemWithCreator(
-                @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
-                @JacksonXmlText String value) {
-
+        public record ItemWithCreator(String name, String value) {
+            
             @JsonCreator
             public ItemWithCreator(
                     @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
