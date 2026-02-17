@@ -31,14 +31,14 @@ public class XmlTextRecord615Test extends XmlTestUtil
             @JsonProperty("Item") @JacksonXmlElementWrapper(useWrapping = false)
             List<ItemWithCreator> item) {
 
-        public record ItemWithCreator(String name, String value) {
+        public record ItemWithCreator(
+                @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
+                @JacksonXmlText String value) {
             
+            // Explicit @JsonCreator is needed for deserialization to work with @JacksonXmlText
             @JsonCreator
-            public ItemWithCreator(
-                    @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
-                    @JacksonXmlText String value) {
-                this.name = name;
-                this.value = value;
+            public ItemWithCreator {
+                // Compact constructor - annotations come from record components
             }
         }
     }
