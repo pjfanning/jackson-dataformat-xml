@@ -56,7 +56,7 @@ public class XmlTextDeser615Test extends XmlTestUtil
         final String value;
 
         @JsonCreator
-        public Item(@JacksonXmlProperty(isAttribute = true) String name, 
+        public Item(@JsonProperty("name") @JacksonXmlProperty(isAttribute = true) String name, 
                     @JacksonXmlText String value) {
             this.name = name;
             this.value = value;
@@ -71,7 +71,7 @@ public class XmlTextDeser615Test extends XmlTestUtil
         }
     }
 
-    // Version with @JsonCreator workaround
+    // Version with explicit @JsonCreator to test constructor-based deserialization
     static class ItemWithCreator {
         final String name;
         final String value;
@@ -79,7 +79,7 @@ public class XmlTextDeser615Test extends XmlTestUtil
         @JsonCreator
         public ItemWithCreator(
                 @JsonProperty("name") @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
-                @JsonProperty("value") @JacksonXmlText String value) {
+                @JacksonXmlText String value) {
             this.name = name;
             this.value = value;
         }

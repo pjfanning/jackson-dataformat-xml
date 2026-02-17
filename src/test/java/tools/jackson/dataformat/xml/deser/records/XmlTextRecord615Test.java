@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class XmlTextRecord615Test extends XmlTestUtil
 {
-    // Version with @JsonCreator workaround
+    // Version with explicit @JsonCreator to test constructor-based deserialization
     @JacksonXmlRootElement(localName = "ITEMROOT")
     public record ItemRootWithCreator(
             @JsonProperty("Item") @JacksonXmlElementWrapper(useWrapping = false)
@@ -36,11 +36,11 @@ public class XmlTextRecord615Test extends XmlTestUtil
                 @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
                 @JacksonXmlText String value) {
             
-            // Explicit @JsonCreator with @JsonProperty is the workaround needed
+            // Explicit @JsonCreator to demonstrate the fix works with creators
             @JsonCreator
             public ItemWithCreator(
                     @JsonProperty("name") @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
-                    @JsonProperty("value") @JacksonXmlText String value) {
+                    @JacksonXmlText String value) {
                 this.name = name;
                 this.value = value;
             }
