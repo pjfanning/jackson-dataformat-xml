@@ -205,6 +205,12 @@ public class JacksonXmlAnnotationIntrospector
     @Override
     public PropertyName findNameForDeserialization(MapperConfig<?> config, Annotated a)
     {
+        // 17-Feb-2026, [dataformat-xml#615]: Check for @JacksonXmlText first
+        // Properties marked with @JacksonXmlText should use empty string as property name
+        if (_findAnnotation(a, JacksonXmlText.class) != null) {
+            return PropertyName.construct("");
+        }
+        
         PropertyName pn = PropertyName.merge(_findXmlName(a),
                 super.findNameForDeserialization(config, a));
         if (pn == null) {
