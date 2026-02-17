@@ -1,7 +1,6 @@
 package tools.jackson.dataformat.xml.tofix.records;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -33,12 +32,15 @@ public class XmlTextRecord615Test extends XmlTestUtil
             List<ItemWithCreator> item) {
 
         public record ItemWithCreator(
-                @JsonProperty("name") @JacksonXmlProperty(isAttribute = true) String name,
+                @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
                 @JacksonXmlText String value) {
 
             @JsonCreator
-            public ItemWithCreator(final Map<String, String> item) {
-                this(item.get("name"), item.get(""));
+            public ItemWithCreator(
+                    @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
+                    @JacksonXmlText String value) {
+                this.name = name;
+                this.value = value;
             }
         }
     }

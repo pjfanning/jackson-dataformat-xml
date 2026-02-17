@@ -49,12 +49,10 @@ public class XmlTextDeser615Test extends XmlTestUtil
     static class Item {
         @JsonProperty("name")
         @JacksonXmlProperty(isAttribute = true)
-        String name;
+        final String name;
 
         @JacksonXmlText
-        String value;
-
-        public Item() { }
+        final String value;
 
         public Item(String name, String value) {
             this.name = name;
@@ -65,30 +63,20 @@ public class XmlTextDeser615Test extends XmlTestUtil
             return name;
         }
 
-        public void setName(String name) {
-            this.name = name;
-        }
-
         public String getValue() {
             return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
         }
     }
 
     // Version with @JsonCreator workaround
     static class ItemWithCreator {
-        @JsonProperty("name")
-        @JacksonXmlProperty(isAttribute = true)
-        String name;
-
-        @JacksonXmlText
-        String value;
+        final String name;
+        final String value;
 
         @JsonCreator
-        public ItemWithCreator(@JsonProperty("name") String name, @JsonProperty("") String value) {
+        public ItemWithCreator(
+                @JacksonXmlProperty(localName = "name", isAttribute = true) String name,
+                @JacksonXmlText String value) {
             this.name = name;
             this.value = value;
         }
